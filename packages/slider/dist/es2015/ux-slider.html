@@ -1,0 +1,12 @@
+<template>
+  <require from="./ux-slider.css"></require>
+
+  <div class="slider-container" mousedown.delegate="onTrackMouseDown($event)">
+    <div class="slider-track slider-track-before" css="width: ${sliderBeforeWidth}%;"></div>
+    <div class="slider-thumb-container">
+      <button>
+      </button>
+    </div>
+    <div class="slider-track slider-track-after" css="width: ${sliderAfterWidth}%;"></div>
+  </div>
+</template>

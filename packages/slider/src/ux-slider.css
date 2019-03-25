@@ -1,0 +1,44 @@
+ux-slider {
+  display: inline-block;
+  position: relative;
+}
+
+ux-slider>.slider-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+ux-slider>.slider-container * {
+  cursor: pointer;
+}
+
+ux-slider>.slider-container>.slider-track {
+  z-index: 1;
+  background-color: var(--aurelia-ux--slider-background, var(--aurelia-ux--design-primary, #3F51B5));
+  height: 2px;
+}
+
+ux-slider>.slider-container>.slider-track.slider-track-before {
+  opacity: 0.8;
+}
+
+ux-slider>.slider-container>.slider-track.slider-track-after {
+  opacity: 0.4;
+}
+
+ux-slider>.slider-container>.slider-thumb-container {
+  display: flex;
+}
+
+ux-slider>.slider-container>.slider-thumb-container>button {
+  border-radius: 50%;
+  border: none;
+  padding: 0px;
+  z-index: 2;
+  background-color: var(--aurelia-ux--slider-background, var(--aurelia-ux--design-primary, #3F51B5));
+  height: var(--aurelia-ux--slider-thumb-diameter, 12px);
+  width: var(--aurelia-ux--slider-thumb-diameter, 12px);
+}
+
