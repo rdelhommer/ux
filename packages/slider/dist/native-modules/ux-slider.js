@@ -8,6 +8,8 @@ import { customElement, bindable } from 'aurelia-templating';
 import { inject } from 'aurelia-dependency-injection';
 import { StyleEngine } from '@aurelia-ux/core';
 import { computedFrom, bindingMode } from 'aurelia-binding';
+// TODO: implement step attribute
+// TODO: implement hover, focus, etc styles
 var UxSlider = /** @class */ (function () {
     function UxSlider(element, styleEngine) {
         var _this = this;
@@ -35,12 +37,18 @@ var UxSlider = /** @class */ (function () {
         this.minChanged();
         this.maxChanged();
         this.valueChanged();
-    };
-    UxSlider.prototype.attached = function () {
-        window.addEventListener('mouseup', this.onMouseUp);
+        this.disabledChanged();
     };
     UxSlider.prototype.detached = function () {
         window.removeEventListener('mouseup', this.onMouseUp);
+    };
+    UxSlider.prototype.disabledChanged = function () {
+        if (this.disabled) {
+            window.removeEventListener('mouseup', this.onMouseUp);
+        }
+        else {
+            window.addEventListener('mouseup', this.onMouseUp);
+        }
     };
     UxSlider.prototype.themeChanged = function (newValue) {
         if (newValue != null && newValue.themeKey == null) {
@@ -86,6 +94,9 @@ var UxSlider = /** @class */ (function () {
                 : value;
     };
     UxSlider.prototype.onTrackMouseDown = function (e) {
+        if (this.disabled) {
+            return;
+        }
         this.isActive = true;
         this.updateValue(e.clientX);
         window.addEventListener('mousemove', this.onMouseMove);
@@ -109,6 +120,9 @@ var UxSlider = /** @class */ (function () {
     __decorate([
         bindable
     ], UxSlider.prototype, "max", void 0);
+    __decorate([
+        bindable
+    ], UxSlider.prototype, "disabled", void 0);
     __decorate([
         computedFrom('percentValue')
     ], UxSlider.prototype, "sliderBeforeWidth", null);

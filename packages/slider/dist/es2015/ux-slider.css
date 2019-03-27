@@ -42,3 +42,20 @@ ux-slider>.slider-container>.slider-thumb-container>button {
   width: var(--aurelia-ux--slider-thumb-diameter, 12px);
 }
 
+/* Disabled */
+ux-slider>.slider-container.disabled {
+  cursor: no-drop;
+}
+
+ux-slider>.slider-container.disabled * {
+  cursor: no-drop;
+}
+
+ux-slider>.slider-container.disabled>.slider-track {
+  background-color: var(--aurelia-ux--slider-disabled-background, #e1e1e1);
+}
+
+ux-slider>.slider-container.disabled>.slider-thumb-container>button {
+  background-color: var(--aurelia-ux--slider-disabled-background, #e1e1e1);
+}
+

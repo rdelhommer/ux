@@ -4,6 +4,9 @@ import { StyleEngine, UxComponent } from '@aurelia-ux/core';
 import { UxSliderTheme } from './ux-slider-theme';
 import { computedFrom, bindingMode } from 'aurelia-binding';
 
+// TODO: implement step attribute
+// TODO: implement hover, focus, etc styles
+
 @inject(Element, StyleEngine)
 @customElement('ux-slider')
 export class UxSlider implements UxComponent {
@@ -16,6 +19,7 @@ export class UxSlider implements UxComponent {
   @bindable({ defaultBindingMode: bindingMode.twoWay }) public value: number;
   @bindable public min: number;
   @bindable public max: number;
+  @bindable public disabled: boolean;
 
   constructor(
     public element: HTMLElement,
@@ -37,14 +41,19 @@ export class UxSlider implements UxComponent {
     this.minChanged();
     this.maxChanged();
     this.valueChanged();
-  }
-
-  public attached() {
-    window.addEventListener('mouseup', this.onMouseUp);
+    this.disabledChanged();
   }
 
   public detached() {
     window.removeEventListener('mouseup', this.onMouseUp);
+  }
+
+  public disabledChanged() {
+    if (this.disabled) {
+      window.removeEventListener('mouseup', this.onMouseUp);
+    } else {
+      window.addEventListener('mouseup', this.onMouseUp);
+    }
   }
 
   public themeChanged(newValue: any) {
@@ -102,6 +111,10 @@ export class UxSlider implements UxComponent {
   }
 
   public onTrackMouseDown(e: MouseEvent) {
+    if (this.disabled) {
+      return;
+    }
+
     this.isActive = true;
 
     this.updateValue(e.clientX);

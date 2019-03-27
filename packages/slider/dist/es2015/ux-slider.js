@@ -8,6 +8,8 @@ import { customElement, bindable } from 'aurelia-templating';
 import { inject } from 'aurelia-dependency-injection';
 import { StyleEngine } from '@aurelia-ux/core';
 import { computedFrom, bindingMode } from 'aurelia-binding';
+// TODO: implement step attribute
+// TODO: implement hover, focus, etc styles
 let UxSlider = class UxSlider {
     constructor(element, styleEngine) {
         this.element = element;
@@ -26,12 +28,18 @@ let UxSlider = class UxSlider {
         this.minChanged();
         this.maxChanged();
         this.valueChanged();
-    }
-    attached() {
-        window.addEventListener('mouseup', this.onMouseUp);
+        this.disabledChanged();
     }
     detached() {
         window.removeEventListener('mouseup', this.onMouseUp);
+    }
+    disabledChanged() {
+        if (this.disabled) {
+            window.removeEventListener('mouseup', this.onMouseUp);
+        }
+        else {
+            window.addEventListener('mouseup', this.onMouseUp);
+        }
     }
     themeChanged(newValue) {
         if (newValue != null && newValue.themeKey == null) {
@@ -77,6 +85,9 @@ let UxSlider = class UxSlider {
                 : value;
     }
     onTrackMouseDown(e) {
+        if (this.disabled) {
+            return;
+        }
         this.isActive = true;
         this.updateValue(e.clientX);
         window.addEventListener('mousemove', this.onMouseMove);
@@ -101,6 +112,9 @@ __decorate([
 __decorate([
     bindable
 ], UxSlider.prototype, "max", void 0);
+__decorate([
+    bindable
+], UxSlider.prototype, "disabled", void 0);
 __decorate([
     computedFrom('percentValue')
 ], UxSlider.prototype, "sliderBeforeWidth", null);

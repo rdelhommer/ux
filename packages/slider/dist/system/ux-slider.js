@@ -51,12 +51,18 @@ System.register(["aurelia-templating", "aurelia-dependency-injection", "@aurelia
                     this.minChanged();
                     this.maxChanged();
                     this.valueChanged();
-                };
-                UxSlider.prototype.attached = function () {
-                    window.addEventListener('mouseup', this.onMouseUp);
+                    this.disabledChanged();
                 };
                 UxSlider.prototype.detached = function () {
                     window.removeEventListener('mouseup', this.onMouseUp);
+                };
+                UxSlider.prototype.disabledChanged = function () {
+                    if (this.disabled) {
+                        window.removeEventListener('mouseup', this.onMouseUp);
+                    }
+                    else {
+                        window.addEventListener('mouseup', this.onMouseUp);
+                    }
                 };
                 UxSlider.prototype.themeChanged = function (newValue) {
                     if (newValue != null && newValue.themeKey == null) {
@@ -102,6 +108,9 @@ System.register(["aurelia-templating", "aurelia-dependency-injection", "@aurelia
                             : value;
                 };
                 UxSlider.prototype.onTrackMouseDown = function (e) {
+                    if (this.disabled) {
+                        return;
+                    }
                     this.isActive = true;
                     this.updateValue(e.clientX);
                     window.addEventListener('mousemove', this.onMouseMove);
@@ -125,6 +134,9 @@ System.register(["aurelia-templating", "aurelia-dependency-injection", "@aurelia
                 __decorate([
                     aurelia_templating_1.bindable
                 ], UxSlider.prototype, "max", void 0);
+                __decorate([
+                    aurelia_templating_1.bindable
+                ], UxSlider.prototype, "disabled", void 0);
                 __decorate([
                     aurelia_binding_1.computedFrom('percentValue')
                 ], UxSlider.prototype, "sliderBeforeWidth", null);

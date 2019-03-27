@@ -7,6 +7,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 define(["require", "exports", "aurelia-templating", "aurelia-dependency-injection", "@aurelia-ux/core", "aurelia-binding"], function (require, exports, aurelia_templating_1, aurelia_dependency_injection_1, core_1, aurelia_binding_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    // TODO: implement step attribute
+    // TODO: implement hover, focus, etc styles
     var UxSlider = /** @class */ (function () {
         function UxSlider(element, styleEngine) {
             var _this = this;
@@ -34,12 +36,18 @@ define(["require", "exports", "aurelia-templating", "aurelia-dependency-injectio
             this.minChanged();
             this.maxChanged();
             this.valueChanged();
-        };
-        UxSlider.prototype.attached = function () {
-            window.addEventListener('mouseup', this.onMouseUp);
+            this.disabledChanged();
         };
         UxSlider.prototype.detached = function () {
             window.removeEventListener('mouseup', this.onMouseUp);
+        };
+        UxSlider.prototype.disabledChanged = function () {
+            if (this.disabled) {
+                window.removeEventListener('mouseup', this.onMouseUp);
+            }
+            else {
+                window.addEventListener('mouseup', this.onMouseUp);
+            }
         };
         UxSlider.prototype.themeChanged = function (newValue) {
             if (newValue != null && newValue.themeKey == null) {
@@ -85,6 +93,9 @@ define(["require", "exports", "aurelia-templating", "aurelia-dependency-injectio
                     : value;
         };
         UxSlider.prototype.onTrackMouseDown = function (e) {
+            if (this.disabled) {
+                return;
+            }
             this.isActive = true;
             this.updateValue(e.clientX);
             window.addEventListener('mousemove', this.onMouseMove);
@@ -108,6 +119,9 @@ define(["require", "exports", "aurelia-templating", "aurelia-dependency-injectio
         __decorate([
             aurelia_templating_1.bindable
         ], UxSlider.prototype, "max", void 0);
+        __decorate([
+            aurelia_templating_1.bindable
+        ], UxSlider.prototype, "disabled", void 0);
         __decorate([
             aurelia_binding_1.computedFrom('percentValue')
         ], UxSlider.prototype, "sliderBeforeWidth", null);
