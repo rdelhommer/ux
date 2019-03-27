@@ -4,8 +4,10 @@ import { StyleEngine, UxComponent } from '@aurelia-ux/core';
 import { UxSliderTheme } from './ux-slider-theme';
 import { computedFrom, bindingMode } from 'aurelia-binding';
 
-// TODO: implement step attribute
+// TODO: unit tests
+// TODO: keyboard control
 // TODO: implement hover, focus, etc styles
+// TODO: animations
 
 @inject(Element, StyleEngine)
 @customElement('ux-slider')
@@ -20,6 +22,7 @@ export class UxSlider implements UxComponent {
   @bindable public min: number;
   @bindable public max: number;
   @bindable public disabled: boolean;
+  @bindable public step: number;
 
   constructor(
     public element: HTMLElement,
@@ -42,6 +45,7 @@ export class UxSlider implements UxComponent {
     this.maxChanged();
     this.valueChanged();
     this.disabledChanged();
+    this.stepChanged();
   }
 
   public detached() {
@@ -54,6 +58,15 @@ export class UxSlider implements UxComponent {
     } else {
       window.addEventListener('mouseup', this.onMouseUp);
     }
+  }
+
+  public stepChanged() {
+    if (this.step === undefined || this.step === null) {
+      this.step = 1;
+      return;
+    }
+
+    this.step = Number(this.step);
   }
 
   public themeChanged(newValue: any) {
@@ -101,13 +114,15 @@ export class UxSlider implements UxComponent {
   public updateValue(currentMouseX: number) {
     const normalizedMouseX = currentMouseX - this.element.offsetLeft;
     const percentValue = normalizedMouseX / this.element.clientWidth;
-    const value = Math.round(((this.max - this.min) * percentValue) + this.min);
+    const rawValue = ((this.max - this.min) * percentValue) + this.min;
+    const numSteps = Math.round((rawValue - this.min) / this.step);
+    const steppedValue = this.min + (this.step * numSteps);
 
-    this.value = value > this.max
+    this.value = steppedValue > this.max
       ? this.max
-      : value < this.min
+      : steppedValue < this.min
         ? this.min
-        : value;
+        : steppedValue;
   }
 
   public onTrackMouseDown(e: MouseEvent) {

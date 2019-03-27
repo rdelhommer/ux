@@ -12,12 +12,14 @@ export declare class UxSlider implements UxComponent {
     min: number;
     max: number;
     disabled: boolean;
+    step: number;
     constructor(element: HTMLElement, styleEngine: StyleEngine);
     readonly sliderBeforeWidth: number;
     readonly sliderAfterWidth: number;
     bind(): void;
     detached(): void;
     disabledChanged(): void;
+    stepChanged(): void;
     themeChanged(newValue: any): void;
     minChanged(): void;
     maxChanged(): void;

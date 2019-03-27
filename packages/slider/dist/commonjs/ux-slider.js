@@ -10,8 +10,10 @@ var aurelia_templating_1 = require("aurelia-templating");
 var aurelia_dependency_injection_1 = require("aurelia-dependency-injection");
 var core_1 = require("@aurelia-ux/core");
 var aurelia_binding_1 = require("aurelia-binding");
-// TODO: implement step attribute
+// TODO: unit tests
+// TODO: keyboard control
 // TODO: implement hover, focus, etc styles
+// TODO: animations
 var UxSlider = /** @class */ (function () {
     function UxSlider(element, styleEngine) {
         var _this = this;
@@ -40,6 +42,7 @@ var UxSlider = /** @class */ (function () {
         this.maxChanged();
         this.valueChanged();
         this.disabledChanged();
+        this.stepChanged();
     };
     UxSlider.prototype.detached = function () {
         window.removeEventListener('mouseup', this.onMouseUp);
@@ -51,6 +54,13 @@ var UxSlider = /** @class */ (function () {
         else {
             window.addEventListener('mouseup', this.onMouseUp);
         }
+    };
+    UxSlider.prototype.stepChanged = function () {
+        if (this.step === undefined || this.step === null) {
+            this.step = 1;
+            return;
+        }
+        this.step = Number(this.step);
     };
     UxSlider.prototype.themeChanged = function (newValue) {
         if (newValue != null && newValue.themeKey == null) {
@@ -88,12 +98,14 @@ var UxSlider = /** @class */ (function () {
     UxSlider.prototype.updateValue = function (currentMouseX) {
         var normalizedMouseX = currentMouseX - this.element.offsetLeft;
         var percentValue = normalizedMouseX / this.element.clientWidth;
-        var value = Math.round(((this.max - this.min) * percentValue) + this.min);
-        this.value = value > this.max
+        var rawValue = ((this.max - this.min) * percentValue) + this.min;
+        var numSteps = Math.round((rawValue - this.min) / this.step);
+        var steppedValue = this.min + (this.step * numSteps);
+        this.value = steppedValue > this.max
             ? this.max
-            : value < this.min
+            : steppedValue < this.min
                 ? this.min
-                : value;
+                : steppedValue;
     };
     UxSlider.prototype.onTrackMouseDown = function (e) {
         if (this.disabled) {
@@ -125,6 +137,9 @@ var UxSlider = /** @class */ (function () {
     __decorate([
         aurelia_templating_1.bindable
     ], UxSlider.prototype, "disabled", void 0);
+    __decorate([
+        aurelia_templating_1.bindable
+    ], UxSlider.prototype, "step", void 0);
     __decorate([
         aurelia_binding_1.computedFrom('percentValue')
     ], UxSlider.prototype, "sliderBeforeWidth", null);

@@ -8,8 +8,10 @@ import { customElement, bindable } from 'aurelia-templating';
 import { inject } from 'aurelia-dependency-injection';
 import { StyleEngine } from '@aurelia-ux/core';
 import { computedFrom, bindingMode } from 'aurelia-binding';
-// TODO: implement step attribute
+// TODO: unit tests
+// TODO: keyboard control
 // TODO: implement hover, focus, etc styles
+// TODO: animations
 let UxSlider = class UxSlider {
     constructor(element, styleEngine) {
         this.element = element;
@@ -29,6 +31,7 @@ let UxSlider = class UxSlider {
         this.maxChanged();
         this.valueChanged();
         this.disabledChanged();
+        this.stepChanged();
     }
     detached() {
         window.removeEventListener('mouseup', this.onMouseUp);
@@ -40,6 +43,13 @@ let UxSlider = class UxSlider {
         else {
             window.addEventListener('mouseup', this.onMouseUp);
         }
+    }
+    stepChanged() {
+        if (this.step === undefined || this.step === null) {
+            this.step = 1;
+            return;
+        }
+        this.step = Number(this.step);
     }
     themeChanged(newValue) {
         if (newValue != null && newValue.themeKey == null) {
@@ -77,12 +87,14 @@ let UxSlider = class UxSlider {
     updateValue(currentMouseX) {
         const normalizedMouseX = currentMouseX - this.element.offsetLeft;
         const percentValue = normalizedMouseX / this.element.clientWidth;
-        const value = Math.round(((this.max - this.min) * percentValue) + this.min);
-        this.value = value > this.max
+        const rawValue = ((this.max - this.min) * percentValue) + this.min;
+        const numSteps = Math.round((rawValue - this.min) / this.step);
+        const steppedValue = this.min + (this.step * numSteps);
+        this.value = steppedValue > this.max
             ? this.max
-            : value < this.min
+            : steppedValue < this.min
                 ? this.min
-                : value;
+                : steppedValue;
     }
     onTrackMouseDown(e) {
         if (this.disabled) {
@@ -115,6 +127,9 @@ __decorate([
 __decorate([
     bindable
 ], UxSlider.prototype, "disabled", void 0);
+__decorate([
+    bindable
+], UxSlider.prototype, "step", void 0);
 __decorate([
     computedFrom('percentValue')
 ], UxSlider.prototype, "sliderBeforeWidth", null);
