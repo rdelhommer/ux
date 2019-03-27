@@ -117,18 +117,18 @@ System.register(["aurelia-templating", "aurelia-dependency-injection", "@aurelia
                             ? this.min
                             : steppedValue;
                 };
-                UxSlider.prototype.onTrackMouseDown = function (e) {
+                UxSlider.prototype.onTrackMouseDown = function () {
                     if (this.disabled) {
                         return;
                     }
                     this.isActive = true;
-                    this.updateValue(e.clientX);
                     window.addEventListener('mousemove', this.onMouseMove);
                 };
-                UxSlider.prototype.handleMouseUp = function () {
+                UxSlider.prototype.handleMouseUp = function (e) {
                     if (!this.isActive) {
                         return;
                     }
+                    this.updateValue(e.clientX);
                     window.removeEventListener('mousemove', this.onMouseMove);
                     this.isActive = false;
                 };

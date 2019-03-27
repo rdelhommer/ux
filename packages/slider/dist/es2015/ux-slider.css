@@ -28,6 +28,14 @@ ux-slider>.slider-container>.slider-track.slider-track-after {
   opacity: 0.4;
 }
 
+ux-slider>.slider-container>.slider-track.inactive {
+  transition: width 0.2s ease-out;
+}
+
+ux-slider>.slider-container>.slider-track.active {
+  transition: none;
+}
+
 ux-slider>.slider-container>.slider-thumb-container {
   display: flex;
 }

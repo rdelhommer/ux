@@ -5,9 +5,10 @@ import { UxSliderTheme } from './ux-slider-theme';
 import { computedFrom, bindingMode } from 'aurelia-binding';
 
 // TODO: unit tests
-// TODO: keyboard control
 // TODO: implement hover, focus, etc styles
+// TODO: keyboard control
 // TODO: animations
+// TODO: ios styles
 
 @inject(Element, StyleEngine)
 @customElement('ux-slider')
@@ -125,23 +126,22 @@ export class UxSlider implements UxComponent {
         : steppedValue;
   }
 
-  public onTrackMouseDown(e: MouseEvent) {
+  public onTrackMouseDown() {
     if (this.disabled) {
       return;
     }
 
     this.isActive = true;
 
-    this.updateValue(e.clientX);
-
     window.addEventListener('mousemove', this.onMouseMove);
   }
 
-  private handleMouseUp() {
+  private handleMouseUp(e: MouseEvent) {
     if (!this.isActive) {
       return;
     }
 
+    this.updateValue(e.clientX);
     window.removeEventListener('mousemove', this.onMouseMove);
     this.isActive = false;
   }

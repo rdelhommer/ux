@@ -9,9 +9,10 @@ import { inject } from 'aurelia-dependency-injection';
 import { StyleEngine } from '@aurelia-ux/core';
 import { computedFrom, bindingMode } from 'aurelia-binding';
 // TODO: unit tests
-// TODO: keyboard control
 // TODO: implement hover, focus, etc styles
+// TODO: keyboard control
 // TODO: animations
+// TODO: ios styles
 let UxSlider = class UxSlider {
     constructor(element, styleEngine) {
         this.element = element;
@@ -96,18 +97,18 @@ let UxSlider = class UxSlider {
                 ? this.min
                 : steppedValue;
     }
-    onTrackMouseDown(e) {
+    onTrackMouseDown() {
         if (this.disabled) {
             return;
         }
         this.isActive = true;
-        this.updateValue(e.clientX);
         window.addEventListener('mousemove', this.onMouseMove);
     }
-    handleMouseUp() {
+    handleMouseUp(e) {
         if (!this.isActive) {
             return;
         }
+        this.updateValue(e.clientX);
         window.removeEventListener('mousemove', this.onMouseMove);
         this.isActive = false;
     }
