@@ -26,7 +26,7 @@ export declare class UxSlider implements UxComponent {
     valueChanged(): void;
     updateValue(currentMouseX: number): void;
     onTrackMouseDown(): void;
-    onKeyDown(e: KeyboardEvent): void;
+    onKeyDown(e: KeyboardEvent): boolean;
     private handleMouseUp;
     private boundValue;
 }

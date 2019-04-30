@@ -5,7 +5,6 @@ import { UxSliderTheme } from './ux-slider-theme';
 import { computedFrom, bindingMode } from 'aurelia-binding';
 
 // TODO: unit tests
-// TODO: implement hover, focus, etc styles
 // TODO: animations
 // TODO: ios styles
 
@@ -139,6 +138,8 @@ export class UxSlider implements UxComponent {
         : this.value;
 
     this.value = this.boundValue(steppedValue);
+
+    return true;
   }
 
   private handleMouseUp(e: MouseEvent) {

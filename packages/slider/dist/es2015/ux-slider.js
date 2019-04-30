@@ -106,6 +106,7 @@ let UxSlider = class UxSlider {
                 ? this.value + this.step
                 : this.value;
         this.value = this.boundValue(steppedValue);
+        return true;
     }
     handleMouseUp(e) {
         if (!this.isActive) {

@@ -127,6 +127,7 @@ System.register(["aurelia-templating", "aurelia-dependency-injection", "@aurelia
                             ? this.value + this.step
                             : this.value;
                     this.value = this.boundValue(steppedValue);
+                    return true;
                 };
                 UxSlider.prototype.handleMouseUp = function (e) {
                     if (!this.isActive) {
