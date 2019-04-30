@@ -6,7 +6,6 @@ import { computedFrom, bindingMode } from 'aurelia-binding';
 
 // TODO: unit tests
 // TODO: implement hover, focus, etc styles
-// TODO: keyboard control
 // TODO: animations
 // TODO: ios styles
 
@@ -119,11 +118,7 @@ export class UxSlider implements UxComponent {
     const numSteps = Math.round((rawValue - this.min) / this.step);
     const steppedValue = this.min + (this.step * numSteps);
 
-    this.value = steppedValue > this.max
-      ? this.max
-      : steppedValue < this.min
-        ? this.min
-        : steppedValue;
+    this.value = this.boundValue(steppedValue);
   }
 
   public onTrackMouseDown() {
@@ -136,6 +131,16 @@ export class UxSlider implements UxComponent {
     window.addEventListener('mousemove', this.onMouseMove);
   }
 
+  public onKeyDown(e: KeyboardEvent) {
+    var steppedValue = e.keyCode === 37 || e.keyCode === 40
+      ? this.value - this.step
+      : e.keyCode === 38 || e.keyCode === 39
+        ? this.value + this.step
+        : this.value;
+
+    this.value = this.boundValue(steppedValue);
+  }
+
   private handleMouseUp(e: MouseEvent) {
     if (!this.isActive) {
       return;
@@ -144,5 +149,13 @@ export class UxSlider implements UxComponent {
     this.updateValue(e.clientX);
     window.removeEventListener('mousemove', this.onMouseMove);
     this.isActive = false;
+  }
+
+  private boundValue(potentialValue: number) {
+    return potentialValue > this.max
+      ? this.max
+      : potentialValue < this.min
+        ? this.min
+        : potentialValue;
   }
 }

@@ -8,7 +8,7 @@
          class.bind="isActive ? 'active' : 'inactive'"
          css="width: ${sliderBeforeWidth}%;"></div>
     <div class="slider-thumb-container">
-      <button>
+      <button keydown.delegate="onKeyDown($event)">
       </button>
     </div>
     <div class="slider-track slider-track-after" 

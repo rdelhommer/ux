@@ -111,11 +111,7 @@ System.register(["aurelia-templating", "aurelia-dependency-injection", "@aurelia
                     var rawValue = ((this.max - this.min) * percentValue) + this.min;
                     var numSteps = Math.round((rawValue - this.min) / this.step);
                     var steppedValue = this.min + (this.step * numSteps);
-                    this.value = steppedValue > this.max
-                        ? this.max
-                        : steppedValue < this.min
-                            ? this.min
-                            : steppedValue;
+                    this.value = this.boundValue(steppedValue);
                 };
                 UxSlider.prototype.onTrackMouseDown = function () {
                     if (this.disabled) {
@@ -124,6 +120,14 @@ System.register(["aurelia-templating", "aurelia-dependency-injection", "@aurelia
                     this.isActive = true;
                     window.addEventListener('mousemove', this.onMouseMove);
                 };
+                UxSlider.prototype.onKeyDown = function (e) {
+                    var steppedValue = e.keyCode === 37 || e.keyCode === 40
+                        ? this.value - this.step
+                        : e.keyCode === 38 || e.keyCode === 39
+                            ? this.value + this.step
+                            : this.value;
+                    this.value = this.boundValue(steppedValue);
+                };
                 UxSlider.prototype.handleMouseUp = function (e) {
                     if (!this.isActive) {
                         return;
@@ -131,6 +135,13 @@ System.register(["aurelia-templating", "aurelia-dependency-injection", "@aurelia
                     this.updateValue(e.clientX);
                     window.removeEventListener('mousemove', this.onMouseMove);
                     this.isActive = false;
+                };
+                UxSlider.prototype.boundValue = function (potentialValue) {
+                    return potentialValue > this.max
+                        ? this.max
+                        : potentialValue < this.min
+                            ? this.min
+                            : potentialValue;
                 };
                 __decorate([
                     aurelia_templating_1.bindable
