@@ -5,7 +5,6 @@ import { UxSliderTheme } from './ux-slider-theme';
 import { computedFrom, bindingMode } from 'aurelia-binding';
 
 // TODO: unit tests
-// TODO: animations
 // TODO: ios styles
 
 @inject(Element, StyleEngine)
